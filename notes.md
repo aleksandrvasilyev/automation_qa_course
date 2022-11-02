@@ -1,0 +1,10 @@
+- automation_qa_course
+    - locators 
+      - page.py
+    - pages
+      - base_page.py
+    - tests
+      - elements_test.py
+    - venv
+    - conftest.py
+    - requirements.txt

@@ -1,0 +1,1 @@
+[Структура проекта](https://github.com/aleksandrvasilyev/automation_qa_course/blob/main/notes.md)
