@@ -1,4 +1,8 @@
 - automation_qa_course
+    - data
+      - data.py
+    - generator
+      - generator.py
     - locators 
       - page.py
     - pages
