@@ -1,7 +1,7 @@
 from pages.base_page import BasePage
 import time
 import pytest
-from pages.elements_page import TextBoxPage, CheckBoxPage
+from pages.elements_page import TextBoxPage, CheckBoxPage, RadioButtonPage
 
 
 class TestElements:
@@ -17,7 +17,6 @@ class TestElements:
             assert current_address == output_current_address
             assert permanent_address == output_permanent_address
 
-    @pytest.mark.mytest
     class TestCheckBox:
 
         def test_check_box(self, driver):
@@ -28,3 +27,19 @@ class TestElements:
             input_checkbox = check_box_page.get_checked_checkboxes()
             output_result = check_box_page.get_output_result()
             assert input_checkbox == output_result
+
+    class TestRadioButton:
+
+        def test_radio_button(self, driver):
+            radio_button_page = RadioButtonPage(driver, 'https://demoqa.com/radio-button')
+            radio_button_page.open()
+            radio_button_page.click_radio_page('yes')
+            result_yes = radio_button_page.get_output()
+            radio_button_page.click_radio_page('impressive')
+            result_impressive = radio_button_page.get_output()
+            radio_button_page.click_radio_page('no')
+            result_no = radio_button_page.get_output()
+            assert result_yes == 'Yes'
+            assert result_impressive == 'Impressive'
+            assert result_no == 'No'
+
