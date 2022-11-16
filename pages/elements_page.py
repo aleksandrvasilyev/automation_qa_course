@@ -1,7 +1,8 @@
 import random
 
 from generator.generator import generated_person
-from locators.elements_page_locators import TextBoxPageLocators, CheckBoxPageLocators, RadioButtonPageLocators
+from locators.elements_page_locators import TextBoxPageLocators, CheckBoxPageLocators, RadioButtonPageLocators, \
+    WebTablePageLocators
 from pages.base_page import BasePage
 from selenium.webdriver.common.by import By
 
@@ -68,9 +69,6 @@ class CheckBoxPage(BasePage):
 class RadioButtonPage(BasePage):
     locators = RadioButtonPageLocators()
 
-    # def click_on_radio(self):
-    #     self.element_is_visible(self.locators.YES_RADIO_BUTTON).click()
-
     def click_radio_page(self, choice):
         button = {'yes': self.locators.YES_RADIO_BUTTON,
                   'impressive': self.locators.IMPRESSIVE_RADIO_BUTTON,
@@ -79,3 +77,47 @@ class RadioButtonPage(BasePage):
 
     def get_output(self):
         return self.element_is_visible(self.locators.TEXT_SUCCESS).text
+
+
+class WebTablePage(BasePage):
+    locators = WebTablePageLocators()
+
+    def click_to_add_button(self):
+        self.element_is_visible(self.locators.ADD_BUTTON).click()
+
+    def add_new_person(self):
+        count = 1
+        while count != 0:
+            person_info = next(generated_person())
+            print(person_info)
+            firstname = person_info.first_name
+            lastname = person_info.last_name
+            email = person_info.email
+            age = person_info.age
+            salary = person_info.salary
+            department = person_info.department
+            self.element_is_visible(self.locators.FORM_FIRST_NAME).send_keys(firstname)
+            self.element_is_visible(self.locators.FORM_LAST_NAME).send_keys(lastname)
+            self.element_is_visible(self.locators.FORM_EMAIL).send_keys(email)
+            self.element_is_visible(self.locators.FORM_AGE).send_keys(age)
+            self.element_is_visible(self.locators.FORM_SALARY).send_keys(salary)
+            self.element_is_visible(self.locators.FORM_DEPARTMENT).send_keys(department)
+            self.element_is_visible(self.locators.FORM_SUBMIT_BUTTON).click()
+            return [firstname, lastname, str(age), email, str(salary), department]
+
+    def check_new_added_person(self):
+        elements = self.elements_are_present(self.locators.TABLE_ALL_ELEMENTS)
+        all_elements = []
+        for element in elements:
+            all_elements.append(element.text.splitlines())
+        return all_elements
+
+    def search(self, key):
+        search_field = self.element_is_present(self.locators.SEARCH_INPUT)
+        search_field.send_keys(key)
+        return key
+
+    def check_search_person(self):
+        delete_button = self.element_is_present(self.locators.DELETE_BUTTON)
+        row = delete_button.find_element(*self.locators.ROW_PARENT)
+        return row.text.splitlines()

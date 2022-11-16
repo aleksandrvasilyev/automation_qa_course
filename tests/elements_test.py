@@ -1,7 +1,9 @@
+from random import random, randint
+
 from pages.base_page import BasePage
 import time
 import pytest
-from pages.elements_page import TextBoxPage, CheckBoxPage, RadioButtonPage
+from pages.elements_page import TextBoxPage, CheckBoxPage, RadioButtonPage, WebTablePage
 
 
 class TestElements:
@@ -42,4 +44,23 @@ class TestElements:
             assert result_yes == 'Yes'
             assert result_impressive == 'Impressive'
             assert result_no == 'No'
+
+    class TestWebTables:
+
+        def test_add_user_to_table(self, driver):
+            add_user_to_table = WebTablePage(driver, 'https://demoqa.com/webtables')
+            add_user_to_table.open()
+            add_user_to_table.click_to_add_button()
+            new_person = add_user_to_table.add_new_person()
+            table = add_user_to_table.check_new_added_person()
+            assert new_person in table
+
+        def test_search_user_in_table(self, driver):
+            search_user_in_table = WebTablePage(driver, 'https://demoqa.com/webtables')
+            search_user_in_table.open()
+            search_user_in_table.click_to_add_button()
+            key_word = search_user_in_table.add_new_person()[randint(0, 5)]
+            search_user_in_table.search(key_word)
+            table_result = search_user_in_table.check_search_person()
+            assert key_word in table_result
 
